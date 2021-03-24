@@ -1,7 +1,7 @@
 <template>
   <div :class="{ 'menu-list': true, 'menu-list-hide': $store.state.Collapse }">
     <el-menu
-      default-active="2"
+      default-active="1"
       class="el-menu-vertical-demo"
       background-color="#545c64"
       text-color="#fff"
@@ -10,35 +10,40 @@
       :collapse="$store.state.Collapse"
       :collapse-transition="$store.state.CollapseTransition"
     >
-      <el-submenu index="1">
+      <el-submenu
+        v-for="router in menuRole"
+        :key="router.name"
+        :index="router.name"
+      >
         <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>导航一</span>
+          <i :class="router.meta.class"></i>
+          <span>{{ router.meta.title }}</span>
         </template>
-        <el-menu-item-group>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group>
-          <el-menu-item index="1-3">选项3</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="1-4">
-          <template slot="title">选项4</template>
-          <el-menu-item index="1-4-1">选项1</el-menu-item>
-        </el-submenu>
+        <el-menu-item
+          v-for="children in router.children"
+          :key="children.name"
+          :index="children.name"
+        >
+          <router-link :to="{ name: children.name }" tag="div">
+            {{ children.meta.title }}
+          </router-link>
+        </el-menu-item>
       </el-submenu>
-      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">导航二</span>
-      </el-menu-item>
-      <el-menu-item index="3">
-        <i class="el-icon-document"></i>
-        <span slot="title">导航三</span>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <i class="el-icon-setting"></i>
-        <span slot="title">导航四</span>
-      </el-menu-item>
     </el-menu>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      arr: this.$store.state.menuRole,
+    };
+  },
+  computed: {
+    menuRole() {
+      return this.$store.state.menuRole.filter((r) => r.meta.hidden === false);
+    },
+  },
+};
+</script>

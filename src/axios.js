@@ -4,7 +4,8 @@ const instance = axios.create({
   baseURL: 'https://mallapi.duyiedu.com/',
 });
 
-instance.interceptors.request.use((config) => config, (error) => { Promise.reject(error); });
+instance.interceptors.request.use((config) => config,
+  (error) => { Promise.reject(error); });
 
 instance.interceptors.response.use((response) => {
   if (response.data.status === 'fail') {

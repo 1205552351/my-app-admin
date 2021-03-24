@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { setCookie, getCookie, removeCookie } from '@/util/userinfo';
 
 Vue.use(Vuex);
 
@@ -8,6 +9,8 @@ export default new Vuex.Store({
     Showicon: true,
     Collapse: false,
     CollapseTransition: false,
+    user: getCookie(),
+    menuRole: [],
   },
   mutations: {
     changeShowIcon(state) {
@@ -19,6 +22,20 @@ export default new Vuex.Store({
     changeCollapseTransition(state) {
       state.CollapseTransition = !state.CollapseTransition;
     },
+    setUserInfo(state, userInfo) {
+      state.user = userInfo;
+    },
+    logout(state) {
+      state.user = {
+        username: '',
+        appkey: '',
+        role: '',
+        email: '',
+      };
+    },
+    changMenu(state, roles) {
+      state.menuRole = roles;
+    },
   },
   actions: {
     changeShowIcon({ commit }) {
@@ -29,6 +46,17 @@ export default new Vuex.Store({
     },
     changeCollapseTransition({ commit }) {
       commit('changeCollapseTransition');
+    },
+    setUserInfo({ commit }, userInfo) {
+      commit('setUserInfo', userInfo);
+      setCookie(userInfo);
+    },
+    logout({ commit }) {
+      commit('logout');
+      removeCookie();
+    },
+    changMenu({ commit }, roles) {
+      commit('changMenu', roles);
     },
   },
   modules: {

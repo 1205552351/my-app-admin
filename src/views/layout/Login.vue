@@ -15,10 +15,10 @@
           autocomplete="off"
         ></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="pass">
+      <el-form-item label="密码" prop="password">
         <el-input
           type="password"
-          v-model="loginForm.pass"
+          v-model="loginForm.password"
           autocomplete="off"
         ></el-input>
       </el-form-item>
@@ -59,11 +59,11 @@ export default {
     return {
       loginForm: {
         email: '',
-        pass: '',
+        password: '',
       },
       rules: {
         email: [{ validator: validateEmail, trigger: 'blur' }],
-        pass: [{ validator: validatePass, trigger: 'blur' }],
+        password: [{ validator: validatePass, trigger: 'blur' }],
       },
     };
   },
@@ -74,6 +74,7 @@ export default {
           api
             .login(this.loginForm)
             .then((res) => {
+              this.$store.dispatch('setUserInfo', res);
               this.$router.push({
                 name: 'Home',
               });
